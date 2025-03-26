@@ -42,10 +42,8 @@ from os.path import dirname, abspath, join, split
 from setuptools import Extension, Command
 from packaging import version
 import sysconfig
-from setuptools.command.build_ext import build_ext
+from setuptools.command.build_ext import build_ext, customize_compiler
 from setuptools.command.install import install
-from distutils.sysconfig import customize_compiler
-#import sysconfig
 from contextlib import contextmanager
 from subprocess import getstatusoutput
 
