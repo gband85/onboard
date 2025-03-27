@@ -614,7 +614,7 @@ class UninstallCommand(Command):
             
 ##### setup #####
 
-DistUtilsExtra.auto.setup(
+setup(
     name = 'onboard',
     version = '1.4.2', # here the package version is set
     author = 'U. Niethammer',
