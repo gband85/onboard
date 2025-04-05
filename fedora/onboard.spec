@@ -12,6 +12,9 @@ License:            GPLv3 and BSD
 URL:                https://github.com/dr-ni/onboard/archive/%{version}.%{release_num}/
 Source:             %{url}%{name}-%{version}.%{release_num}.tar.gz
 
+# rpm build fixes
+Patch0:             0001-rpm-build-fixes.patch
+
 BuildRequires:      gcc-c++
 BuildRequires:      python3-setuptools
 BuildRequires:      python3-devel
@@ -43,6 +46,7 @@ from the X server.
 
 %prep
 %setup -n onboard-%{version}.%{release_num}
+%patch 0 -p1
 
 %build
 %py3_build

@@ -1,0 +1,194 @@
+diff -urN onboard-1.4.2.2-orig/setup.py onboard-1.4.2.2/setup.py
+--- onboard-1.4.2.2-orig/setup.py	2025-03-12 18:05:22.000000000 -0500
++++ onboard-1.4.2.2/setup.py	2025-04-04 17:39:53.944005257 -0500
+@@ -1,6 +1,6 @@
+ #!/usr/bin/python3
+ # -*- coding: utf-8 -*-
+- 
++
+ # Copyright © 2007 Martin Böhme <martin.bohm@kubuntu.org>
+ # Copyright © 2012-2013 Gerd Kohlberger <lowfi@chello.at>
+ # Copyright © 2009-2017 Francesco Fumanti <francesco.fumanti@gmx.net>
+@@ -26,12 +26,6 @@
+ 
+ import os
+ import sys
+-
+-# Automatically add --user if not running as root and install is called without --user
+-if "install" in sys.argv and os.geteuid() != 0:
+-    print("Installing as use is not supported, please run sudo python3 setup.py install")
+-    sys.exit(0)
+-    
+ import re
+ import glob
+ import subprocess
+@@ -83,7 +77,7 @@
+             return "current" # gnome-shell not found fall back to current
+     except FileNotFoundError:
+         return "current"  # gnome-shell not found fall back to current
+-    
++
+ gnome_shell_version = get_gnome_shell_version()
+ 
+ current_ver = version.Version(DistUtilsExtra.auto.__version__)
+@@ -197,8 +191,8 @@
+                 try: os.unlink(dstfile)
+                 except OSError: pass
+                 os.symlink(file, dstfile)
+-                
+-                
++
++
+ 
+ # Make xgettext extract translatable strings from _format() calls too.
+ var = "XGETTEXT_ARGS"
+@@ -401,10 +395,10 @@
+             config_path = os.path.expanduser("~/.config")
+ 
+             # Get the autostart directory
+-            autostart_destination = os.path.join(config_path, "autostart") 
++            autostart_destination = os.path.join(config_path, "autostart")
+         else:
+             autostart_destination = '/etc/xdg/autostart'
+-  
++
+ 
+         for i, file_set in enumerate(self.distribution.data_files):
+             target, files = file_set
+@@ -444,25 +438,25 @@
+         # Only run this if NOT inside a fakeroot environment
+         if not os.getenv("FAKEROOTKEY"):
+             print("Running tools/gen_gschema.py...")
+-            
++
+ 
+             # Determine install base
+             if "--user" in sys.argv:
+                 install_base = Path(site.getuserbase())
+             else:
+                 install_base = Path(sysconfig.get_paths()["data"])
+-                
++
+             # Schema directory
+             schema_dir = install_base / "share" / "glib-2.0" / "schemas"
+ 
+             # Ensure the schema directory exists
+             schema_dir.mkdir(parents=True, exist_ok=True)
+-            
+-            print("Running glib-compile-schemas...")
++
++            print("Skipping glib-compile-schemas because we are building an RPM.")
+ 
+             try:
+                 if os.path.exists(schema_dir):
+-                    subprocess.check_call(["glib-compile-schemas", schema_dir])
++                    pass
+                 else:
+                     print(f"Warning: Schema directory not found: {schema_dir}")
+             except subprocess.CalledProcessError as e:
+@@ -489,7 +483,7 @@
+         if os.geteuid() != 0:
+             install_base = Path(site.getuserbase())
+             site_packages = Path(site.getuserbase()) / "lib" / "python{}.{}".format(sys.version_info.major, sys.version_info.minor) / "site-packages"
+-            
++
+             # Get the user's config directory
+             config_path = os.path.expanduser("~/.config")
+ 
+@@ -498,19 +492,19 @@
+         else:
+             install_base = Path(sysconfig.get_paths()["data"])
+             site_packages = Path(sysconfig.get_paths()["purelib"])
+-            
++
+             config_path = os.path.expanduser("/etc")
+             autostart_destination = Path(config_path) / "xdg" / "autostart"
+ 
+ 
+-            
++
+         onboard_share_path = os.path.join(install_base, "share/onboard")
+         if not os.path.exists(onboard_share_path):
+             print("Unable to find the onboard installation in: {}".format(install_base))
+             sys.exit(1)
+         else:
+             print("Detected installation path: {}".format(install_base))
+-            
++
+         # List all files to be removed
+         dirs_to_remove = set()
+ 
+@@ -527,16 +521,16 @@
+                         os.remove(file_path)
+                     else:
+                         print("Warning: Skip removing installed file due to missing onboard in filepath: {}".format(file_path))
+-                        
++
+         onboard_locale_files = glob.glob(os.path.join(install_base, "share/locale", "*", "LC_MESSAGES", "onboard.mo"))
+         print("Removing locale files: {}/LC_MESSAGES/onboard.mo".format(os.path.join(install_base, "share/locale", "*")))
+         for onboard_locale_file in onboard_locale_files:
+             os.remove(onboard_locale_file)
+-            
+-        
++
++
+         # Schema directory
+         schema_dir = install_base / "share" / "glib-2.0" / "schemas"
+-        
++
+         extra_files = [
+             "{}99_onboard-default-settings.gschema.override".format(schema_dir),
+             "{}org.onboard.gschema.xml".format(schema_dir),
+@@ -545,7 +539,7 @@
+             os.path.join(install_base, "bin/onboard-settings"),
+             os.path.join(install_base, "share/applications/onboard.desktop"),
+             os.path.join(install_base, "share/applications/onboard-settings.desktop"),
+-            
++
+         ]
+ 
+         if os.geteuid() == 0:
+@@ -554,8 +548,8 @@
+                 "{}99_onboard-default-settings.gschema.override".format(schema_dir),
+                 "{}org.onboard.gschema.xml".format(schema_dir),
+             ])
+-            
+-            
++
++
+         for extra_file in extra_files:
+             if os.path.exists(extra_file):
+                 print("Removing file: {}".format(extra_file))
+@@ -580,12 +574,12 @@
+                 else:
+                     print("Warning: Onboard directory is not empty, removing recursively: {}".format(full_dir_path))
+                     shutil.rmtree(full_dir_path)
+-                    
++
+         help_dir = Path(os.path.join(install_base, "share/help/C/onboard"))
+         if help_dir.exists():
+             print("Removing help directory recursively: {}".format(help_dir))
+             shutil.rmtree(help_dir)
+-                    
++
+         include_dir = Path(os.path.join(install_base, "include/onboard"))
+         if include_dir.exists():
+             print("Removing include directory recursively: {}".format(include_dir))
+@@ -595,7 +589,7 @@
+         if os.path.exists(schema_dir):
+             print("Updating GLib schemas in {}...".format(schema_dir))
+             subprocess.run(["glib-compile-schemas", schema_dir], check=True)
+-            
++
+         # Remove `Onboard` directory from Python dist-packages
+         onboard_path = site_packages / "Onboard"
+ 
+@@ -613,7 +607,7 @@
+             print("Removing egg-info directory: {}".format(egg_info))
+             shutil.rmtree(egg_info)
+ 
+-            
++
+ ##### setup #####
+ 
+ DistUtilsExtra.auto.setup(
