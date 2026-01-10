@@ -500,6 +500,16 @@ class Settings(DialogBuilder):
                        config.keyboard, "inter_key_stroke_delay",
                        get_inter_key_stroke_delay, set_inter_key_stroke_delay)
 
+        def get_popup_duration(config_object, key):
+            return getattr(config_object, key)
+
+        def set_popup_duration(config_object, key, value):
+            setattr(config_object, key, value)
+
+        self.bind_spin("popup_duration_spinbutton",
+                       config.keyboard, "popup_duration",
+                       get_popup_duration, set_popup_duration)
+
         # Auto-show
         self._page_auto_show = PageAutoShow(self, builder)
 

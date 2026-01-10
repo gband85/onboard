@@ -1,6 +1,8 @@
-# Onboard 1.4.2
+# Onboard 1.4.3-9
 
-![onb](https://github.com/dr-ni/onboard/blob/main/onboard.png)
+![onb](https://github.com/onboard-osk/onboard/blob/main/onboard.png)
+
+![onb](https://github.com/onboard-osk/onboard/blob/main/Onboard.gif)
 
 ## Description
 
@@ -10,10 +12,6 @@ It has been designed with simplicity in mind and can be used right away
 without the need of any configuration, as it can read the keyboard layout
 from the X server. Onboard is currently not working with wayland - a correct
 X11/Xorg setup is required.
-
-The parent project at https://launchpad.net/onboard sadly seems not to be
-maintained anymore. Old PPA downloads for Ubuntu-releases can still be
-found at https://launchpad.net/~onboard/+archive/ubuntu/stable .
 
 ## Building from Source
 Find below short instructions on how to build Onboard straight from this
@@ -61,17 +59,13 @@ new distributions are always welcome too.
         Next step is "Build and Install from Source"
 
 ## Build and Install from Source
-        git clone https://github.com/dr-ni/onboard
+        git clone https://github.com/onboard-osk/onboard
         cd onboard
         python3 setup.py clean
         python3 setup.py build
         
         # System-wide installation (requires root access):
         sudo python3 setup.py install
-
-        # Change keyboard language layout
-        # setxkbmap -layout de
-        # or [us|in|ru|...]
 
 ## Uninstall if installed from Source
         # System-wide uninstall (requires root access):
@@ -133,6 +127,7 @@ The `apt_install_debs.sh` script simplifies installing the generated `.deb` pack
 
         # Terminal
         man onboard
+        onboard -h
         
         # Interactive
         yelp "help:onboard"
@@ -141,25 +136,29 @@ The `apt_install_debs.sh` script simplifies installing the generated `.deb` pack
         # Onboard
         # Right click on icon in systray -> Help 
 
+        # Change keyboard language layout
+        # setxkbmap -layout de
+        # or [us|in|ru|...]
+
 ## D-Bus interface
 
 The Onboard D-Bus interface allows communication between Onboard and other processes running concurrently on the Linux desktop.
 
 Here the Interface description:
-[DBUS.md](https://github.com/dr-ni/onboard/blob/main/DBUS.md)
+[DBUS.md](https://github.com/onboard-osk/onboard/blob/main/DBUS.md)
 
 ## Mousetweaks
 
 This optional package provides mouse accessibility enhancements for the GNOME desktop.
 It offers a way to perform clicks without using any physical mouse buttons (Hover Click).
 The package is also available in various package managers. However, it is often
-not working anymore with onboard. In this case a manual installation from https://github.com/dr-ni/mousetweaks should help.
+not working anymore with onboard. In this case a manual installation from https://github.com/onboard-osk/mousetweaks should help.
 
 ## Homepage
-https://github.com/dr-ni/onboard
+https://github.com/onboard-osk/onboard
 
 ## Reporting Bugs
-https://github.com/dr-ni/onboard/issues
+https://github.com/onboard-osk/onboard/issues
 
 ## License
 This program is released under the terms of the GNU General Public License. Please see the file COPYING for details.

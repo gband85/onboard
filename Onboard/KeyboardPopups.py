@@ -21,6 +21,7 @@
 
 from __future__ import division, print_function, unicode_literals
 
+import threading
 import cairo
 
 from Onboard.Version import require_gi_versions
@@ -58,6 +59,10 @@ config = Config()
 BUTTON123_MASK = Gdk.ModifierType.BUTTON1_MASK | \
                  Gdk.ModifierType.BUTTON2_MASK | \
                  Gdk.ModifierType.BUTTON3_MASK
+popup_fill_color = None
+popup_label_color = None
+popup_color_scheme_name = None
+popup_color_lock = threading.Lock()
 
 
 class TouchFeedback:
@@ -276,6 +281,7 @@ class LabelPopup(KeyboardPopupDrawable):
         self._osk_util.set_input_rect(win, 0, 0, 1, 1)
 
     def on_draw(self, widget, context):
+        global popup_fill_color, popup_label_color
         if not LabelPopup._pango_layout:
             LabelPopup._pango_layout = Pango.Layout(context=Gdk.pango_context_get())
 
@@ -288,9 +294,7 @@ class LabelPopup(KeyboardPopupDrawable):
                        .deflate((rect.w - rect.w * self.ARROW_WIDTH) / 2.0, 0)
 
         label_rect = content_rect.deflate(rect.w * self.LABEL_MARGIN)
-
-        # background
-        fill = self._key.get_fill_color()
+            
         context.save()
         context.set_operator(cairo.OPERATOR_CLEAR)
         context.paint()
@@ -298,7 +302,7 @@ class LabelPopup(KeyboardPopupDrawable):
 
         context.push_group()
 
-        context.set_source_rgba(*fill)
+        context.set_source_rgba(*popup_fill_color)
         roundrect_arc(context, content_rect, config.CORNER_RADIUS)
         context.fill()
 
@@ -312,16 +316,15 @@ class LabelPopup(KeyboardPopupDrawable):
         # draw label/image
         pixbuf = self._key.get_image(label_rect.w, label_rect.h)
         if pixbuf:
-            color = self._key.get_image_color()
+            # color = self._key.get_image_color()
             image_style = self._key.image_style
-            pixbuf.draw(context, label_rect, color, image_style)
+            pixbuf.draw(context, label_rect, popup_label_color, image_style)
         else:
             label = self._key.get_label()
             if label:
                 if label == " ":
                     label = "␣"
-                color = self._key.get_label_color()
-                self._draw_text(context, label, label_rect, color)
+                self._draw_text(context, label, label_rect, popup_label_color)
 
         context.pop_group_to_source()
         context.paint_with_alpha(self._opacity)
@@ -378,6 +381,34 @@ class LabelPopup(KeyboardPopupDrawable):
         return self._key
 
     def set_key(self, key):
+        global popup_fill_color, popup_label_color, popup_color_scheme_name
+        # background
+        if key:
+            if not popup_color_scheme_name or popup_color_scheme_name != key.color_scheme.name:
+                with popup_color_lock:
+                    root_key_group = key.color_scheme._root.get_default_key_group()
+                    if root_key_group:
+                        fill_rgb, fill_opacity = \
+                                root_key_group.find_element_color("fill", {})
+
+                        label_rgb, label_opacity = \
+                                root_key_group.find_element_color("label", {})
+                                
+                    if fill_rgb is None: 
+                        fill_rgb = key.color_scheme.get_key_default_rgba(key, "fill", {})[:3]
+
+                    if fill_opacity is None:
+                        fill_opacity = key.color_scheme.get_key_default_rgba(key, "fill", {})[3]     
+                    
+                    if label_rgb is None: 
+                        label_rgb = key.color_scheme.get_key_default_rgba(key, "label", {})[:3]
+
+                    if label_opacity is None:
+                        label_opacity = key.color_scheme.get_key_default_rgba(key, "label", {})[3]     
+                            
+                    popup_fill_color = fill_rgb + [fill_opacity]
+                    popup_label_color = label_rgb + [label_opacity]
+                    popup_color_scheme_name = key.color_scheme.name
         self._key = key
 
 

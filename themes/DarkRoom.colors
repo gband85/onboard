@@ -30,17 +30,27 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
     <key_group>
         <color element="fill"   rgb="#505001"/>
+        <color element="fill"   rgb="#707020" hover="true"/>
+        <color element="fill"   rgb="#f44336" pressed="true"/>
         <color element="stroke" rgb="#000000"/>
+        <color element="stroke" rgb="#aaaaaa" hover="true"/>
+        <color element="stroke" rgb="#f46f65" pressed="true"/>
         <color element="label"  rgb="#ffffff"/>
+        <color element="label"  rgb="#ffffff" hover="true"/>
+        <color element="label"  rgb="#ffffff" pressed="true"/> 
         icon0
         
         <key_group>
             <color element="fill" rgb="#ffffff"/>
+            <color element="fill" rgb="#dddddd" hover="true"/>
+            <color element="fill" rgb="#f44336" pressed="true"/>
             icon1, icon2
         </key_group>
         
         <key_group>
             <color element="fill" rgb="#403020"/>
+            <color element="fill" rgb="#5a3a30" hover="true"/>
+            <color element="fill" rgb="#f44336" pressed="true"/>
             icon3,
             RCTL, LCTL, RALT, LALT, LWIN, CAPS, 
             LFSH, RTSH, NMLK, ESC
@@ -48,6 +58,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         
         <key_group>
             <color element="fill" rgb="#404031"/>
+            <color element="fill" rgb="#5a5a41" hover="true"/>
+            <color element="fill" rgb="#f44336" pressed="true"/>
             MENU, RWIN, BKSP, TAB, RTRN, 
             KPDL, KPEN,
             LEFT, RGHT, UP, DOWN, INS, DELE, HOME, END, PGUP, PGDN,
@@ -61,19 +73,30 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
         
         <key_group>
             <color element="fill" rgb="#2b2b63"/>
+            <color element="fill" rgb="#44448c" hover="true"/>
+            <color element="fill" rgb="#f44336" pressed="true"/>
             m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15
         </key_group>
         
         <key_group>
             <color element="fill" rgb="#7f0000"/>
+            <color element="fill" rgb="#aa3030" hover="true"/>
+            <color element="fill" rgb="#f44336" pressed="true"/>
             settings
         </key_group>
 
-	<!-- word suggestions -->
-	<key_group>
+	    <!-- word suggestions -->
+    	<key_group>
             <color element="fill" rgb="#242010"/>
-	    wordlist, prediction
+            <color element="fill" rgb="#ffffff" hover="true"/>
+            <color element="fill" rgb="#f44336" pressed="true"/>
+            prediction
+                <key_group>
+                    <color element="fill" rgb="#111920" opacity="0.8"/>
+                    <color element="fill" rgb="#243a00" hover="true"/>
+                    <color element="fill" rgb="#f44336" pressed="true"/>
+                    wordlist, pause-learning.wordlist, language.wordlist, hide.wordlist
+                </key_group>
+        </key_group>
 	</key_group>
-    </key_group>
 </color_scheme>
-

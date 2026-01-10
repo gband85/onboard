@@ -176,8 +176,8 @@ class Config(ConfigObject):
     DISH_KEY_BORDER = (2.5, 2.5)
 
     # minimum time keys are drawn in pressed state
-    UNPRESS_DELAY = 0.15
-
+    UNPRESS_DELAY = 0.06
+    
     # Margin to leave around wordlist labels; smaller margins leave
     # more room for prediction choices
     WORDLIST_LABEL_MARGIN = (2, 2)
@@ -234,6 +234,7 @@ class Config(ConfigObject):
             ver = version("onboard")
         except PackageNotFoundError:
             ver = "unknown"
+        ver = ver.replace('.post', '-') 
         # parse command line
         parser = OptionParser(version=ver)
         group = OptionGroup(parser, "General Options")
@@ -1610,6 +1611,8 @@ class ConfigKeyboard(ConfigObject):
 
         self.add_key("inter-key-stroke-delay", 0.0)
         self.add_key("modifier-update-delay", 1.0)
+
+        self.add_key("popup-duration", 0.2)
 
         self.add_key("key-press-modifiers", {"button3" : "SHIFT"}, 'a{ss}')
 

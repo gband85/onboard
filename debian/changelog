@@ -1,3 +1,118 @@
+onboard (1.4.3-9) UNRELEASED; urgency=medium
+
+  [ Uwe Niethammer ]
+  * Update README.md
+  * Update setup.py
+
+  [ Alex P. ]
+  * allow to specify unpress_delay via settings
+  * remove unused
+
+  [ dr-ni ]
+  * added script for toggle-onboard-hoverclick
+
+  [ Lukas Gottschall ]
+  * Implement key animation hover & set the UNPRESS_DELAY to 0.06
+  * apt_install_debs.sh: Update GLib schemas & icon cache also the version was not changed.
+  * set the UNPRESS_DELAY back to 0.15
+  * Preserve 'pressed' colors for fill, stroke, and label on hover Refactor themes/*.colors. Improve key stroke shading based on press state to simulate visual depth to gradient key  style. Avoid using unpress timers for non-touch input events.
+  * Add minimum display duration for label popup after key release Add missing label hover colors in themes/*.colors
+
+  [ Alex P. ]
+  * revert default unpress_delay to 0.15
+  * increase max unpress_delay
+
+  [ Lukas Gottschall ]
+  * Set LabelPopup color to match the unpressed and unhovered fill/label color of its key Change pressed color in Charcoal.colors to red Update MIN_LABEL_POPUP_DURATION_MS to 200 ms
+
+  [ dr-ni ]
+  * Rename unpress-delay to popup-duration
+  * cleanup
+  * added popup duration settings to keyboard->advanced settings
+  * revert UNPRESS_DELAY to 0.06 and code cleanup
+  * Update color schemes
+  * cleanup
+  * fix suggestions colors
+  * added HighContrastInverseBlue theme
+  * update of color schemes
+  * fixed color theme
+
+  [ Lukas Gottschall ]
+  * Fix: Hover effect remains when cursor leaves keyboard Hide active key popup immediately when another key is pressed
+  * Fix config.MIN_LABEL_POPUP_DURATION_MS was removed
+  * Add hover and pressed state colors to themes/Black.colors Introduce new "Ambiance Dark" color scheme
+  * Resolve merge conflict: popup duration chage
+
+  [ dr-ni ]
+  * fix typo
+  * fix wrong usage
+
+  [ Lukas Gottschall ]
+  * Add a script to refresh translations
+  * Start unpress_timers if simulated clicks are active Fix popup random color behaviour
+
+  [ dr-ni ]
+  * updated de translations
+  * cleanup
+  * updated all po files
+
+  [ Uwe Niethammer ]
+  * Add files via upload
+  * Update README.md
+
+  [ dr-ni ]
+  * code cleanup
+  * cleanup
+  * Added new theme 'Ronboard'
+  * fixed color_scheme
+
+ -- Uwe Niethammer <uwe@dr-niethammer.de>  Wed, 13 Aug 2025 18:35:57 +0200
+
+onboard (1.4.3-7) release; urgency=medium
+
+  [ Lukas Gottschall ]
+  * Remove env GDK_BACKEND=x11 in case of wayland
+  * Add dist_choice/revision to setup.py/Readme.md and use current version from changelog to build debs
+  * Fix setup.py version update
+
+  [ dr-ni ]
+  * Force consistant versioning pip -> dpkg
+  * prevent package not found error
+  * CleanUp
+  * code cleanup as requested in #17
+
+  [ Vladimír Čunát ]
+  * osk: don't redefine bool and use the standard one instead
+
+  [ Uwe Niethammer ]
+  * Update issue templates
+  * Update issue templates
+  * Update issue templates
+  * Update issue templates
+  * Update README.md
+  * Update README.md
+
+  [ dr-ni ]
+  * added screenshot
+
+ -- Uwe Niethammer <uwe@dr-niethammer.de>  Thu, 03 Jul 2025 18:12:50 +0200
+
+onboard (1.4.3-1) unstable; urgency=medium
+
+  * Merge useful changes from theofficialgman: commit 89971d5: "import debian buildfile changes from latest ubuntu source"
+  * Add updatechangelog.sh: automate changelog bump, edit, commit and push
+  * Ensure .deb packages can be built without root privileges
+  * Add version update logic to updatechangelog.sh
+  * Add version update logic to updatechangelog.sh
+
+ -- Lukas Gottschall <dwd@jdownloader.org>  Thu, 12 Jun 2025 19:04:40 +0200
+
+onboard (1.4.2-3) dr-ni; urgency=medium
+
+  * fixed wrong shebang in /usr/local/bin/onboard after install from source
+
+ -- Uwe Niethammer <uwe@dr-niethammer.de>  Wed, 26 Mar 2025 01:50:17 +0200
+
 onboard (1.4.2-2) dr-ni; urgency=medium
 
   * updated README.md

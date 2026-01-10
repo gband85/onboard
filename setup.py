@@ -27,10 +27,6 @@ from __future__ import print_function
 import os
 import sys
 
-# Automatically add --user if not running as root and install is called without --user
-if "install" in sys.argv and os.geteuid() != 0:
-    print("Installing as use is not supported, please run sudo python3 setup.py install")
-    sys.exit(0)
     
 import re
 import glob
@@ -446,14 +442,11 @@ class CustomInstallCommand(install):
             print("Running tools/gen_gschema.py...")
             
 
-            # Determine install base
-            if "--user" in sys.argv:
-                install_base = Path(site.getuserbase())
-            else:
-                install_base = Path(sysconfig.get_paths()["data"])
-                
-            # Schema directory
+
+            # Correct install base from setuptools
+            install_base = Path(self.install_data)
             schema_dir = install_base / "share" / "glib-2.0" / "schemas"
+                
 
             # Ensure the schema directory exists
             schema_dir.mkdir(parents=True, exist_ok=True)
@@ -618,7 +611,7 @@ class UninstallCommand(Command):
 
 DistUtilsExtra.auto.setup(
     name = 'onboard',
-    version = '1.4.2', # here the package version is set
+    version = '1.4.3.post9', # here the package version is set
     author = 'U. Niethammer',
     author_email = 'uwe@dr-niethammer.de',
     url = 'https://github.com/dr-ni/onboard',
@@ -663,6 +656,12 @@ DistUtilsExtra.auto.setup(
 
     scripts = ['onboard', 'onboard-settings'],
 
+    options={
+        'build_scripts': {
+            'executable': '/usr/bin/python3'
+        }
+    },
+    
     # don't let distutils-extra import our files
     requires = [MODULE_NAME_OSK, MODULE_NAME_LM],
 
