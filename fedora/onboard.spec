@@ -60,12 +60,26 @@ rm -rf /home/garrett/tmp/%{name}-%{version}-%{release_num}
 
 %install
 %pyproject_install
-%pyproject_save_files -l onboard
 
-%files -f %{pyproject_files}
 
-%doc AUTHORS README.md HACKING CHANGELOG
+%files
+%{_bindir}/%{name}*
+%{_datadir}/man/man1/onboard*
+%{_datadir}/applications/%{name}*.desktop
+%{python3_sitearch}/Onboard/
+
+%{_datadir}/glib-2.0/schemas/org.onboard.gschema.xml
+
+%doc AUTHORS README.md HACKING
 %license COPYING COPYING.BSD3 COPYING.GPL3
+%defattr(-,root,root,-)
+%{_datadir}/%{name}/
+%{_datadir}/sounds/freedesktop/stereo/onboard-key-feedback.oga
+%{_datadir}/icons/HighContrast/scalable/apps/onboard.svg
+%{_datadir}/icons/hicolor/*/apps/onboard.*
+%{_datadir}/dbus-1/services/org.onboard.Onboard.service
+%{_datadir}/gnome-shell/extensions/Onboard_Indicator@onboard.org
+%{_sysconfdir}/xdg/autostart/onboard-autostart.desktop
 
 %changelog
 * Fri Jan 9 2026 Fabian Affolter <fabian@bernewireless.net> 1.4.3-7
