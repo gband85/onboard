@@ -2,7 +2,7 @@ Name:               onboard
 
 Version:            1.4.3
 %global             major_version       1.4
-%global             release_num         7
+%global             release_num         9
 
 Release:            %{release_num}%{?dist}
 Summary:            On-screen keyboard for TabletPC and mobility impaired users (Xorg only)
@@ -13,7 +13,6 @@ License:            GPLv3 and BSD
 URL:                https://github.com/onboard-osk/onboard/
 Source:             %{name}-%{version}-%{release_num}.tar.gz
 
-BuildArch:      noarch
 BuildRequires:  python3-dbus
 BuildRequires:  python3-devel
 BuildRequires:  python3-distutils-extra
@@ -41,15 +40,14 @@ from the X server.}
 
 %prep
 
-cp -r /home/garrett/source/repos/%{name} /home/garrett/tmp/%{name}-%{version}-%{release_num}
-cd /home/garrett/tmp
+mkdir $HOME/tmp
+cp -r $HOME/source/repos/%{name} $HOME/tmp/%{name}-%{version}-%{release_num}
+cd $HOME/tmp
 tar -czv --exclude='.git' --exclude='.github' --exclude='.gitignore' -f %{name}-%{version}-%{release_num}.tar.gz   %{name}-%{version}-%{release_num}
-cp /home/garrett/tmp/%{name}-%{version}-%{release_num}.tar.gz %{_topdir}/SOURCES
-rm -rf /home/garrett/tmp/%{name}-%{version}-%{release_num}.tar.gz
-rm -rf /home/garrett/tmp/%{name}-%{version}-%{release_num}
+cp $HOME/tmp/%{name}-%{version}-%{release_num}.tar.gz %{_topdir}/SOURCES
+rm -rf $HOME/tmp/%{name}-%{version}-%{release_num}.tar.gz
+rm -rf $HOME/tmp/%{name}-%{version}-%{release_num}
 # cd onboard/fedora
-
-
 
  %setup -n %{name}-%{version}-%{release_num}
   rm -rf %{_topdir}/SOURCES/%{name}-%{version}-%{release_num}.tar.gz
@@ -61,25 +59,85 @@ rm -rf /home/garrett/tmp/%{name}-%{version}-%{release_num}
 %install
 %pyproject_install
 
+# Remove icons for Ubuntu
+rm %{buildroot}%{_datadir}/icons/ubuntu* -rf
+
+%package common
+Summary: Common files for Onboard
+BuildArch: noarch
+Requires: onboard
+
+%description common
+Simple On-screen Keyboard (common files)
+On-screen Keyboard with macros, easy layout creation and word suggestion.
+
+This package ships the architecture independent files of the onboard
+on-screen keyboard.
+
+%package data
+Summary: Data for Onboard
+BuildArch: noarch
+Requires: onboard
+
+%description data
+Language model files for the word suggestion feature of Onboard
+On-screen Keyboard with macros, easy layout creation and word suggestion.
+ 
+This package installs default language model files for various languages.
+The word suggestion feature of Onboard uses these files (and if available
+also custom user language model files) to compute the word completion
+suggestions and the word prediction suggestions.
+
+%package gnome-shell-extension
+Summary: Data for Onboard
+BuildArch: noarch
+Requires: onboard
+
+%description gnome-shell-extension
+GNOME Shell extension for the on-screen keyboard Onboard
+This package hides the official GNOME3 keyboard and provides an icon to
+show/hide Onboard. It is only an initial extension that does not show
+Onboard for activities and passwords, yet.
 
 %files
 %{_bindir}/%{name}*
 %{_datadir}/man/man1/onboard*
 %{_datadir}/applications/%{name}*.desktop
 %{python3_sitearch}/Onboard/
-
+%{python3_sitearch}/onboard-1.4.3.post9.dist-info
 %{_datadir}/glib-2.0/schemas/org.onboard.gschema.xml
+%{_datadir}/icons/HighContrast/symbolic/apps/onboard.svg
+%{_datadir}/icons/hicolor/*/apps/onboard*
+%{_datadir}/glib-2.0/schemas/org.gnome.shell.extensions.onboard-indicator.gschema.xml
+%{_datadir}/glib-2.0/schemas/gschemas.compiled
+%{python3_sitearch}/%{_sysconfdir}/xdg/autostart/onboard-autostart.desktop
 
-%doc AUTHORS README.md HACKING
-%license COPYING COPYING.BSD3 COPYING.GPL3
-%defattr(-,root,root,-)
-%{_datadir}/%{name}/
-%{_datadir}/sounds/freedesktop/stereo/onboard-key-feedback.oga
-%{_datadir}/icons/HighContrast/scalable/apps/onboard.svg
-%{_datadir}/icons/hicolor/*/apps/onboard.*
+%files data
+%{_datadir}/%{name}/models
+%{_datadir}/%{name}/emojione
+
+%files common
+%{_datadir}/doc/%{name}
+%license LICENSE LICENSE.BSD3 LICENSE.GPL3
 %{_datadir}/dbus-1/services/org.onboard.Onboard.service
+%{_datadir}/help/C/onboard/*
+%{_datadir}/locale/*/LC_MESSAGES/onboard.mo
+%{_datadir}/sounds/freedesktop/stereo/onboard-key-feedback.oga
+%{_datadir}/%{name}/layouts
+%{_datadir}/%{name}/scripts
+%{_datadir}/%{name}/themes
+%{_datadir}/%{name}/layoutstrings.py
+%{_datadir}/%{name}/__pycache__/layoutstrings.cpython-*.pyc
+%{_datadir}/%{name}/*.ui
+%{_datadir}/%{name}/tools
+
+
+%files gnome-shell-extension
 %{_datadir}/gnome-shell/extensions/Onboard_Indicator@onboard.org
-%{_sysconfdir}/xdg/autostart/onboard-autostart.desktop
+
+
+
+
 
 %changelog
 * Fri Jan 9 2026 Fabian Affolter <fabian@bernewireless.net> 1.4.3-7
