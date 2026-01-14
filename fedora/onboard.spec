@@ -40,7 +40,7 @@ from the X server.}
 
 %prep
 
-mkdir $HOME/tmp
+mkdir -p $HOME/tmp
 cp -r $HOME/source/repos/%{name} $HOME/tmp/%{name}-%{version}-%{release_num}
 cd $HOME/tmp
 tar -czv --exclude='.git' --exclude='.github' --exclude='.gitignore' -f %{name}-%{version}-%{release_num}.tar.gz   %{name}-%{version}-%{release_num}
